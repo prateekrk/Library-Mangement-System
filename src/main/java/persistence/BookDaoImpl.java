@@ -33,6 +33,7 @@ public class BookDaoImpl implements BookDao {
             book.setBookID(resultSet.getString("BOOK_ID"));
             book.setCategory(resultSet.getString("BOOK_CATEGORY"));
             book.setStockAvailable(resultSet.getInt("STOCK_AVAILABLE"));
+            book.setName(resultSet.getString("BOOK_NAME"));
 
 
             books.add(book);
@@ -75,5 +76,43 @@ public class BookDaoImpl implements BookDao {
         count=resultSet.getInt("COUNT(BOOK_CATEGORY");
 
         return count;
+    }
+
+    @Override
+    public Collection<String> getAllCategories() throws ClassNotFoundException, SQLException, IOException {
+
+        Collection<String> bookCategories=new ArrayList<>();
+
+        Connection connection=DatabaseConnection.getConnection();
+        PreparedStatement preparedStatement=connection.prepareStatement("SELECT DISTINCT(BOOK_CATEGORY) FROM BOOKS");
+
+        ResultSet resultSet=preparedStatement.executeQuery();
+
+        while(resultSet.next()){
+            bookCategories.add(resultSet.getString("BOOK_CATEGORY"));
+        }
+
+        return bookCategories;
+    }
+
+    @Override
+    public Collection<Book> getBooksInCategory(String category) throws ClassNotFoundException, SQLException, IOException {
+
+        Collection<Book> booksInCategory=new ArrayList<>();
+        Book book=new Book();
+
+        Connection connection=DatabaseConnection.getConnection();
+        PreparedStatement preparedStatement=connection.prepareStatement("SELECT * FROM BOOKS WHERE BOOK_CATEGORY=?");
+        preparedStatement.setString(1,category);
+
+        ResultSet resultSet=preparedStatement.executeQuery();
+
+        while(resultSet.next()){
+            book.setName(resultSet.getString("BOOK_NAME"));
+            book.setCategory(category);
+            book.setStockAvailable(resultSet.getInt("STOCK_AVAILABLE"));
+        }
+
+        return  booksInCategory;
     }
 }

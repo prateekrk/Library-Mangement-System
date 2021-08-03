@@ -32,9 +32,9 @@ public class LibraryManagementServiceImpl implements LibraryManagementService{
     }
 
     @Override
-    public boolean returnBook(String employeeID, String bookID,Date returnDate) throws ClassNotFoundException, SQLException, IOException {
+    public boolean returnBook(int issueID,String employeeID, String bookID,Date returnDate) throws ClassNotFoundException, SQLException, IOException {
         int fine;
-        Library library=librayManagementDao.getDetails(employeeID,bookID);
+        Library library=librayManagementDao.getDetails(issueID);
 
 //        System.out.println(library.getFine());
         int numDays= (int)ChronoUnit.DAYS.between(library.getScheduledReturnDate().toLocalDate(),returnDate.toLocalDate());
@@ -46,12 +46,12 @@ public class LibraryManagementServiceImpl implements LibraryManagementService{
            int rate= BookTypes.valueOf(book.getCategory()).getFine();
            fine=(numDays)*rate;
         }
-        return librayManagementDao.returnBook(employeeID,bookID,returnDate,fine);
+        return librayManagementDao.returnBook(issueID,employeeID,bookID,returnDate,fine);
     }
 
     @Override
-    public Library getDetails(String employeeID, String bookID) throws ClassNotFoundException, SQLException, IOException {
-        return librayManagementDao.getDetails(employeeID,bookID);
+    public Library getDetails(int issueId) throws ClassNotFoundException, SQLException, IOException {
+        return librayManagementDao.getDetails(issueId);
 
     }
 
@@ -60,6 +60,11 @@ public class LibraryManagementServiceImpl implements LibraryManagementService{
     @Override
     public Collection<Library> getBooksIssued(String employeeId) throws ClassNotFoundException, SQLException, IOException {
         return librayManagementDao.getBooksIssued(employeeId);
+    }
+
+    @Override
+    public Collection<Library> getEmployeeTransactions(String employeeId) throws ClassNotFoundException, SQLException, IOException {
+        return librayManagementDao.getEmployeeTransactions(employeeId);
     }
 
 }

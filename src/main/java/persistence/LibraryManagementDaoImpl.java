@@ -57,26 +57,51 @@ public class LibraryManagementDaoImpl implements LibrayManagementDao {
         return rows > 0;
     }
 
-    public boolean returnBook(String EmployeeID, String BookId,Date returnDate,int fine) throws ClassNotFoundException, SQLException, IOException {
+    public boolean returnBook(int issueId,String EmployeeID, String BookId,Date returnDate,int fine) throws ClassNotFoundException, SQLException, IOException {
         Connection connection= DatabaseConnection.getConnection();
 
-        PreparedStatement preparedStatement=connection.prepareStatement("UPDATE LIBRARY SET RETURN_DATE=?,FINE=? WHERE EMPLOYEE_ID=? AND BOOK_ID=? AND RETURN_DATE IS NULL");
+        PreparedStatement preparedStatement=connection.prepareStatement("UPDATE LIBRARY SET RETURN_DATE=?,FINE=? WHERE EMPLOYEE_ID=? AND BOOK_ID=? AND ISSUE_ID=? AND RETURN_DATE IS NULL");
         preparedStatement.setDate(1,returnDate);
         preparedStatement.setInt(2,fine);
         preparedStatement.setString(3,EmployeeID);
         preparedStatement.setString(4,BookId);
+        preparedStatement.setInt(5,issueId);
 
         int rows=preparedStatement.executeUpdate();
         return rows>0;
     }
 
+//    @Override
+//    public Library getDetails(String employeeID, String bookId) throws ClassNotFoundException, SQLException, IOException {
+//        Library library=new Library();
+//        Connection connection= DatabaseConnection.getConnection();
+//        PreparedStatement preparedStatement= connection.prepareStatement("SELECT * FROM LIBRARY WHERE EMPLOYEE_ID=? AND BOOK_ID=? ");
+//        preparedStatement.setString(1,employeeID);
+//        preparedStatement.setString(2,bookId);
+//        ResultSet resultSet=preparedStatement.executeQuery();
+//
+//        while(resultSet.next()){
+//
+//            library.setIssueID(resultSet.getInt("ISSUE_ID"));
+//            library.setBookId(resultSet.getString("BOOK_ID"));
+//            library.setEmployeeID(resultSet.getString("EMPLOYEE_ID"));
+//            library.setFine(resultSet.getInt("FINE"));
+//            library.setIssuedDate(resultSet.getDate("ISSUE_DATE"));
+//            library.setReturnDate(resultSet.getDate("RETURN_DATE"));
+//            library.setScheduledReturnDate(resultSet.getDate("SCHEDULED_RETURN"));
+//        }
+//
+//        connection.close();
+//        return library;
+//
+//    }
     @Override
-    public Library getDetails(String employeeID, String bookId) throws ClassNotFoundException, SQLException, IOException {
+    public Library getDetails(int issueID) throws ClassNotFoundException, SQLException, IOException {
         Library library=new Library();
         Connection connection= DatabaseConnection.getConnection();
-        PreparedStatement preparedStatement= connection.prepareStatement("SELECT * FROM LIBRARY WHERE EMPLOYEE_ID=? AND BOOK_ID=? ");
-        preparedStatement.setString(1,employeeID);
-        preparedStatement.setString(2,bookId);
+        PreparedStatement preparedStatement= connection.prepareStatement("SELECT * FROM LIBRARY WHERE ISSUE_ID=?");
+        preparedStatement.setInt(1,issueID);
+//        preparedStatement.setString(2,bookId);
         ResultSet resultSet=preparedStatement.executeQuery();
 
         while(resultSet.next()){
@@ -101,7 +126,7 @@ public class LibraryManagementDaoImpl implements LibrayManagementDao {
 
 
         Connection connection=DatabaseConnection.getConnection();
-        PreparedStatement preparedStatement=connection.prepareStatement("SELECT BOOK_ID,ISSUE_DATE,SCHEDULED_RETURN FROM LIBRARY WHERE EMPLOYEE_ID=? AND RETURN_DATE IS NULL");
+        PreparedStatement preparedStatement=connection.prepareStatement("SELECT BOOK_ID,ISSUE_DATE,SCHEDULED_RETURN,ISSUE_ID FROM LIBRARY WHERE EMPLOYEE_ID=? AND RETURN_DATE IS NULL");
 
         preparedStatement.setString(1,employeeId);
 
@@ -109,6 +134,7 @@ public class LibraryManagementDaoImpl implements LibrayManagementDao {
 
         while(resultSet.next()){
             Library library=new Library();
+            library.setIssueID(resultSet.getInt("ISSUE_ID"));
             library.setBookId(resultSet.getString("BOOK_ID"));
             library.setIssuedDate(resultSet.getDate("ISSUE_DATE"));
             library.setScheduledReturnDate(resultSet.getDate("SCHEDULED_RETURN"));
@@ -116,6 +142,31 @@ public class LibraryManagementDaoImpl implements LibrayManagementDao {
         }
 
         return booksNotReturned;
+    }
+
+    @Override
+    public Collection<Library> getEmployeeTransactions(String employeeId) throws ClassNotFoundException, SQLException, IOException {
+
+        Collection<Library> transactions=new ArrayList<>();
+
+        Connection connection=DatabaseConnection.getConnection();
+        PreparedStatement preparedStatement=connection.prepareStatement("SELECT * FROM LIBRARY WHERE EMPLOYEE_ID=?");
+        preparedStatement.setString(1,employeeId);
+
+        ResultSet resultSet=preparedStatement.executeQuery();
+
+        while(resultSet.next()){
+            Library library=new Library();
+            library.setIssueID(resultSet.getInt("ISSUE_ID"));
+            library.setBookId(resultSet.getString("BOOK_ID"));
+            library.setEmployeeID(resultSet.getString("EMPLOYEE_ID"));
+            library.setFine(resultSet.getInt("FINE"));
+            library.setIssuedDate(resultSet.getDate("ISSUE_DATE"));
+            library.setReturnDate(resultSet.getDate("RETURN_DATE"));
+            library.setScheduledReturnDate(resultSet.getDate("SCHEDULED_RETURN"));
+            transactions.add(library);
+        }
+        return transactions;
     }
 
 //    @Override

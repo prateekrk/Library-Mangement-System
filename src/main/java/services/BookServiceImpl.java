@@ -18,7 +18,17 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    public Collection<String> getBookCategories() throws ClassNotFoundException, SQLException, IOException {
+        return bookDao.getAllCategories();
+    }
+
+    @Override
     public Collection<Book> getAllRecords() throws ClassNotFoundException, SQLException, IOException {
         return bookDao.getAllRecords();
+    }
+
+    @Override
+    public Collection<Book> getBooksInCategory(String category) throws ClassNotFoundException, SQLException, IOException {
+        return bookDao.getBooksInCategory(category);
     }
 }
