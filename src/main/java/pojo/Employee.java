@@ -8,6 +8,6 @@ import lombok.*;
 @NoArgsConstructor
 @ToString
 public class Employee {
-    String name,employeeId,email,password;
+    String employeeId,name,email,password;
     byte access;
 }

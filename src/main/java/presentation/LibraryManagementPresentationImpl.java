@@ -174,14 +174,19 @@ public class LibraryManagementPresentationImpl implements LibraryManagementPrese
                         if (adminPassword.equals(admin.getPassword())) {
                             boolean bool = admin.getAccess() == 1;
                             if (isAdmin(bool)) {
+                                System.out.println("--------------------------------------Welcome "+ admin.getName()+"--------------------------");
                                 while(true) {
+
                                     adminPresentation.showMenu();
                                     int adminChoice = sc.nextInt();
                                     adminPresentation.perfomMenu(adminChoice);
-                                    if(adminChoice==4){
+                                    if(adminChoice==5){
                                         break;
                                     }
                                 }
+                            }
+                            else{
+                                System.out.println("Enter valid Credentials");
                             }
                         }
                         else{
@@ -208,10 +213,12 @@ public class LibraryManagementPresentationImpl implements LibraryManagementPrese
                         break;
                     }
                     if (employeePassword.equals(employee.getPassword())) {
+                        System.out.println("--------------------------------------Welcome "+ employee.getName()+"--------------------------");
+
                         while (true) {
                             employeePresentatio.showMenu();
                             int empChoice = sc.nextInt();
-                            employeePresentatio.perfomMenu(empChoice,employeeID);
+                            employeePresentatio.performMenu(empChoice,employeeID);
                             if(empChoice==6){
                                 break;
                             }
@@ -221,7 +228,9 @@ public class LibraryManagementPresentationImpl implements LibraryManagementPrese
                         System.out.println("Enter Valid Credentials");
                         break;
                     }
-
+                default:
+                    System.out.println("Enter valid choice");
+                    break;
             }
 
         }

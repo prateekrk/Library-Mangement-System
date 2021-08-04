@@ -51,7 +51,7 @@ public class LibraryManagementDaoImpl implements LibrayManagementDao {
         preparedStatement.setString(1,library.getEmployeeID());
         preparedStatement.setString(2,library.getBookId());
         preparedStatement.setDate(3, library.getIssuedDate());
-        preparedStatement.setDate(4,Date.valueOf(library.getIssuedDate().toLocalDate()));
+        preparedStatement.setDate(4,Date.valueOf(library.getIssuedDate().toLocalDate().plusDays(7)));
 
         int rows=preparedStatement.executeUpdate();
         return rows > 0;

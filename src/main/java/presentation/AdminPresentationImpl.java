@@ -72,7 +72,7 @@ public class AdminPresentationImpl implements AdminPresentation{
                         employeeService.addEmployee(employee);
                     }
                     catch(ClassNotFoundException|SQLException|IOException e){
-                        System.out.println(e.getMessage());
+                            e.printStackTrace();
                     }
 
                     break;

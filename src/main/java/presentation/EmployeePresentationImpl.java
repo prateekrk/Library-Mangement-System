@@ -20,7 +20,7 @@ public class EmployeePresentationImpl implements EmployeePresentation{
     BookService bookService=new BookServiceImpl();
 
     Scanner sc=new Scanner(System.in);
-    public void perfomMenu(int choice,String employeeId) {
+    public void performMenu(int choice,String employeeId) {
         switch (choice) {
             case 1:
                 System.out.println("Catalog");
@@ -58,8 +58,7 @@ public class EmployeePresentationImpl implements EmployeePresentation{
                         booksIssued.add(libraryBook);
 
                     } catch (ClassNotFoundException | SQLException | IOException e) {
-//                        System.out.println(e.getMessage());
-                        e.printStackTrace();
+                        System.out.println(e.getMessage());
                     }
                     System.out.println("Want to issue more books?(Y/N)");
                     String ans = sc.nextLine();
@@ -128,16 +127,15 @@ public class EmployeePresentationImpl implements EmployeePresentation{
 
                 System.out.println("Enter choice(Serial Number of Category)");
                 int serialId=sc.nextInt();
-                if(serialId-1>(categories.size())){
+                if(serialId>(categories.size())){
                     System.out.println("Enter Valid Serial ID");
                     break;
                 }
 
-                System.out.println("Books available in "+categories.get(serialId));
+                System.out.println("Books available in "+categories.get(serialId-1));
 
                 try {
-                    System.out.println(bookService.getBooksInCategory(categories.get(serialId-1)).size());
-                    bookService.getBooksInCategory(categories.get(serialId)).forEach(book -> System.out.println(book.getName()+" Availability : "+book.getStockAvailable()));
+                    bookService.getBooksInCategory(categories.get(serialId-1)).forEach(System.out::println);
                 }
                 catch (ClassNotFoundException|SQLException|IOException e){
                     System.out.println(e.getMessage());
@@ -153,6 +151,17 @@ public class EmployeePresentationImpl implements EmployeePresentation{
                     System.out.println(e.getMessage());
                 }
                 break;
+            case 6:
+                System.out.println("Books to be Returned");
+                try {
+                    libraryManagementService.getBooksIssued(employeeId).forEach(book->System.out.printf("%-10s%-10s%-15s%-15s\n",Integer.toString(book.getIssueID()),book.getBookId(),book.getIssuedDate().toString(),book.getScheduledReturnDate().toString()));
+                }
+                catch (SQLException|ClassNotFoundException|IOException e){
+                    System.out.println(e.getMessage());
+                }
+                break;
+            case 7:
+                break;
             default:
                 System.out.println("Enter valid choice");
                 break;
@@ -161,7 +170,7 @@ public class EmployeePresentationImpl implements EmployeePresentation{
 
     @Override
     public void showMenu() {
-        System.out.println("1. Issue A Book\n2. Return Book\n3. View Book catalog\n4. Search Book By Category\n5. View My Transactions\n6. Exit");
+        System.out.println("1. Issue A Book\n2. Return Book\n3. View Book catalog\n4. Search Book By Category\n5. View My Transactions\n6. Books To Be Returned \n7. Exit");
 
     }
 }

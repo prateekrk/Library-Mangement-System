@@ -111,8 +111,8 @@ public class BookDaoImpl implements BookDao {
             book.setName(resultSet.getString("BOOK_NAME"));
             book.setCategory(category);
             book.setStockAvailable(resultSet.getInt("STOCK_AVAILABLE"));
+            booksInCategory.add(book);
         }
-
         return  booksInCategory;
     }
 }

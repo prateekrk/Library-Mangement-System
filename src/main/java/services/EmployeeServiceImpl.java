@@ -13,7 +13,6 @@ public class EmployeeServiceImpl implements EmployeeService{
 
     @Override
     public Employee getEmployee(String employeeID) throws ClassNotFoundException, IOException, SQLException {
-        System.out.println(employeeDao.getEmployee(employeeID));
         return employeeDao.getEmployee(employeeID);
     }
 

@@ -31,7 +31,7 @@ public class EmployeeDaoImpl implements  EmployeeDao{
     @Override
     public boolean addEmployee(Employee employee) throws ClassNotFoundException, IOException, SQLException {
         Connection connection= DatabaseConnection.getConnection();
-        PreparedStatement preparedStatement=connection.prepareStatement("INSERT INTO LIBRARY(EMPLOYEE_ID,NAME,EMAIL,PASSWORD,ACCESS) VALUES (?,?,?,?,?)") ;
+        PreparedStatement preparedStatement=connection.prepareStatement("INSERT INTO EMPLOYEES(EMPLOYEE_ID,NAME,EMAIL,PASSWORD,ACCESS) VALUES (?,?,?,?,?)") ;
         preparedStatement.setString(1,employee.getEmployeeId());
         preparedStatement.setString(2,employee.getName());
         preparedStatement.setString(3, employee.getEmail());
