@@ -13,6 +13,7 @@ public class LibraryManagementSystemMain {
             libraryManagementPresentation.showMenu();
             System.out.println("Enter choice");
             int choice=sc.nextInt();
+            sc.nextLine();
             libraryManagementPresentation.perfomMenu(choice);
 
         }

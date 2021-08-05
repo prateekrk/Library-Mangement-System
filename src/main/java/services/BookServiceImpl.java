@@ -31,4 +31,14 @@ public class BookServiceImpl implements BookService {
     public Collection<Book> getBooksInCategory(String category) throws ClassNotFoundException, SQLException, IOException {
         return bookDao.getBooksInCategory(category);
     }
+
+    @Override
+    public boolean insertBook(Book book) throws ClassNotFoundException, SQLException, IOException {
+        return bookDao.insertBook(book);
+    }
+
+    @Override
+    public boolean increaseStock(String book_id, int stock_available) throws ClassNotFoundException, SQLException, IOException {
+        return bookDao.increaseStock(book_id,stock_available);
+    }
 }

@@ -8,6 +8,6 @@ import lombok.*;
 @Getter
 @ToString
 public class Book {
-    private String bookID,category,name;
+    private String bookID,name,category;
     int stockAvailable;
 }

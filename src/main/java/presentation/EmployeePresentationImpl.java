@@ -23,10 +23,10 @@ public class EmployeePresentationImpl implements EmployeePresentation{
     public void performMenu(int choice,String employeeId) {
         switch (choice) {
             case 1:
-                System.out.println("Catalog");
-
+                System.out.println("--------------------------------Catalog--------------------------------");
+                System.out.println();
                 try {
-                    bookService.getAllRecords().forEach(System.out::println);
+                    bookService.getAllRecords().forEach(book->System.out.printf("%-10s%-10s%-15s%-3s\n",book.getBookID(),book.getName(),book.getCategory(), Integer.toString(book.getStockAvailable())));
                 } catch (ClassNotFoundException | SQLException | IOException e) {
                     e.printStackTrace();
                 }
@@ -79,7 +79,7 @@ public class EmployeePresentationImpl implements EmployeePresentation{
                         break;
                     }
                     System.out.println("Books to be returned");
-                    bookNotReturned.forEach(l -> System.out.println("Issue Id : "+l.getIssueID()+" Book " + l.getBookId() + " was  issued on: " + l.getIssuedDate() + " and Scheduled Return Date : " + l.getScheduledReturnDate()));
+                    bookNotReturned.forEach(book->System.out.printf("%-10s%-10s%-15s%-15s\n",Integer.toString(book.getIssueID()),book.getBookId(),book.getIssuedDate().toString(),book.getScheduledReturnDate().toString()));
                 } catch (ClassNotFoundException | SQLException | IOException e) {
                     System.out.println(e.getMessage());
                     break;
@@ -106,13 +106,12 @@ public class EmployeePresentationImpl implements EmployeePresentation{
 
                 break;
             case 3:
-
+                System.out.println("--------------------------------Catalog--------------------------------");
+                System.out.println();
                 try {
-                    bookService.getAllRecords().forEach(System.out::println);
-
-                } catch (SQLException | IOException | ClassNotFoundException e) {
+                    bookService.getAllRecords().forEach(book->System.out.printf("%-10s%-10s%-15s%-3s\n",book.getBookID(),book.getName(),book.getCategory(), Integer.toString(book.getStockAvailable())));
+                } catch (ClassNotFoundException | SQLException | IOException e) {
                     e.printStackTrace();
-                    System.exit(0);
                 }
                 break;
             case 4:
@@ -145,7 +144,7 @@ public class EmployeePresentationImpl implements EmployeePresentation{
 
             case 5:
                 try {
-                    libraryManagementService.getEmployeeTransactions(employeeId).forEach(System.out::println);
+                    libraryManagementService.getEmployeeTransactions(employeeId).forEach(book->System.out.printf("%-10s%-50s%-50s%-15s%-15s%-2s\n",Integer.toString(book.getIssueID()),book.getBookId(),book.getIssuedDate().toString(),book.getScheduledReturnDate().toString(),book.getReturnDate(),book.getFine()));
                 }
                 catch (ClassNotFoundException|SQLException|IOException e){
                     System.out.println(e.getMessage());

@@ -26,7 +26,7 @@ public class AdminPresentationImpl implements AdminPresentation{
                 case 1:
                     BookService bookService1 = new BookServiceImpl();
                     try {
-                        bookService1.getAllRecords().forEach(System.out::println);
+                        bookService1.getAllRecords().forEach(book->System.out.printf("%-10s%-10s%-15s\n",book.getBookID(),book.getName(),book.getCategory(), book.getStockAvailable()));
 
                     } catch (SQLException | IOException | ClassNotFoundException e) {
                         e.printStackTrace();
@@ -40,7 +40,7 @@ public class AdminPresentationImpl implements AdminPresentation{
                     String employeeId = sc.nextLine();
                     System.out.println("--------------------------------Transactions--------------------------------");
                     try {
-                        libraryManagementService.getEmployeeTransactions(employeeId).forEach(System.out::println);
+                        libraryManagementService.getEmployeeTransactions(employeeId).forEach(book->System.out.printf("%-10s%-50s%-50s%-15s%-15s%-2s\n",Integer.toString(book.getIssueID()),book.getBookId(),book.getIssuedDate().toString(),book.getScheduledReturnDate().toString(),book.getReturnDate(),book.getFine()));
                     } catch (ClassNotFoundException | SQLException | IOException e) {
                         System.out.println(e.getMessage());
                     }
@@ -50,7 +50,7 @@ public class AdminPresentationImpl implements AdminPresentation{
                     System.out.println("--------------------------------Catalog--------------------------------");
                     System.out.println();
                     try {
-                        bookService.getAllRecords().forEach(System.out::println);
+                        bookService.getAllRecords().forEach(book->System.out.printf("%-10s%-10s%-15s%-3s\n",book.getBookID(),book.getName(),book.getCategory(), Integer.toString(book.getStockAvailable())));
                     } catch (ClassNotFoundException | SQLException | IOException e) {
                         e.printStackTrace();
                     }
@@ -77,8 +77,37 @@ public class AdminPresentationImpl implements AdminPresentation{
 
                     break;
                 case 5:
+                    System.out.println("Enter Book_Id");
+                    String book_id=sc.nextLine();
+                    System.out.println("Enter Book_name");
+                    String book_name=sc.nextLine();
+                    System.out.println("Enter Book_category");
+                    String book_category=sc.nextLine();
+                    System.out.println("Enter Stock");
+                    int stock_available=sc.nextInt();
 
+                    Book book=new Book(book_id,book_name,book_category,stock_available);
+                    try{
+                        bookService.insertBook(book);
+                    }
+                    catch (SQLException|ClassNotFoundException|IOException e){
+                        System.out.println(e.getMessage());
+                    }
                     break;
+
+                case 6:
+                    System.out.println("Enter Book_id");
+                    String book_id1=sc.nextLine();
+                    System.out.println("Enter Stock");
+                    int stock_available1=sc.nextInt();
+                    try{
+                        bookService.increaseStock(book_id1,stock_available1);
+                    }
+                    catch (SQLException|ClassNotFoundException|IOException e){
+                        System.out.println(e.getMessage());
+                    }
+                    break;
+                case 7:break;
                 default:
                     System.out.println("Enter valid choice");
                     break;
@@ -86,7 +115,7 @@ public class AdminPresentationImpl implements AdminPresentation{
     }
     @Override
     public void showMenu() {
-        System.out.println("1.Get Library details\n2. View Employee Transactions\n3. View Catalog\n4. Add Employee\n5. Exit");
+        System.out.println("1.Get Library details\n2. View Employee Transactions\n3. View Catalog\n4. Add Employee\n5. Add Book\n6.Increase Book Stock\n7. Exit");
 
     }
 }

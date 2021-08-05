@@ -21,4 +21,7 @@ public interface BookDao {
 
     Collection<Book> getBooksInCategory(String category) throws ClassNotFoundException,SQLException,IOException;
 
+    boolean insertBook(Book book) throws ClassNotFoundException,SQLException,IOException;
+
+    boolean increaseStock(String book_id,int stock_available) throws ClassNotFoundException,SQLException,IOException;
 }

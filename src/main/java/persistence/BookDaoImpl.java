@@ -19,16 +19,16 @@ public class BookDaoImpl implements BookDao {
 
     @Override
     public Collection<Book> getAllRecords() throws ClassNotFoundException, SQLException, IOException {
-        Connection connection=DatabaseConnection.getConnection();
+        Connection connection = DatabaseConnection.getConnection();
 
-        Collection<Book> books=new ArrayList<Book>();
+        Collection<Book> books = new ArrayList<Book>();
 
-        PreparedStatement preparedStatement= connection.prepareStatement("SELECT * FROM BOOKS");
+        PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM BOOKS");
 
-        ResultSet resultSet=preparedStatement.executeQuery();
+        ResultSet resultSet = preparedStatement.executeQuery();
 
-        while(resultSet.next()){
-            Book book=new Book();
+        while (resultSet.next()) {
+            Book book = new Book();
 
             book.setBookID(resultSet.getString("BOOK_ID"));
             book.setCategory(resultSet.getString("BOOK_CATEGORY"));
@@ -45,11 +45,11 @@ public class BookDaoImpl implements BookDao {
 
 
     @Override
-    public Book getBook(String bookId) throws ClassNotFoundException, SQLException, IOException{
+    public Book getBook(String bookId) throws ClassNotFoundException, SQLException, IOException {
         Book book = new Book();
         Connection connection = DatabaseConnection.getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM BOOKS WHERE BOOK_ID=?");
-        preparedStatement.setString(1,bookId);
+        preparedStatement.setString(1, bookId);
 
         ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -69,11 +69,11 @@ public class BookDaoImpl implements BookDao {
 
     @Override
     public int bookAvailableCount(String bookId) throws ClassNotFoundException, SQLException, IOException {
-        int count=0;
-        Connection connection=DatabaseConnection.getConnection();
-        PreparedStatement preparedStatement=connection.prepareStatement("SELECT COUNT(BOOK_CATEGORY) FROM BOOKS WHERE BOOK_ID=?");
-        ResultSet resultSet=preparedStatement.executeQuery();
-        count=resultSet.getInt("COUNT(BOOK_CATEGORY");
+        int count = 0;
+        Connection connection = DatabaseConnection.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement("SELECT COUNT(BOOK_CATEGORY) FROM BOOKS WHERE BOOK_ID=?");
+        ResultSet resultSet = preparedStatement.executeQuery();
+        count = resultSet.getInt("COUNT(BOOK_CATEGORY");
 
         return count;
     }
@@ -81,14 +81,14 @@ public class BookDaoImpl implements BookDao {
     @Override
     public Collection<String> getAllCategories() throws ClassNotFoundException, SQLException, IOException {
 
-        Collection<String> bookCategories=new ArrayList<>();
+        Collection<String> bookCategories = new ArrayList<>();
 
-        Connection connection=DatabaseConnection.getConnection();
-        PreparedStatement preparedStatement=connection.prepareStatement("SELECT DISTINCT(BOOK_CATEGORY) FROM BOOKS");
+        Connection connection = DatabaseConnection.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement("SELECT DISTINCT(BOOK_CATEGORY) FROM BOOKS");
 
-        ResultSet resultSet=preparedStatement.executeQuery();
+        ResultSet resultSet = preparedStatement.executeQuery();
 
-        while(resultSet.next()){
+        while (resultSet.next()) {
             bookCategories.add(resultSet.getString("BOOK_CATEGORY"));
         }
 
@@ -98,21 +98,49 @@ public class BookDaoImpl implements BookDao {
     @Override
     public Collection<Book> getBooksInCategory(String category) throws ClassNotFoundException, SQLException, IOException {
 
-        Collection<Book> booksInCategory=new ArrayList<>();
-        Book book=new Book();
+        Collection<Book> booksInCategory = new ArrayList<>();
+        Book book = new Book();
 
-        Connection connection=DatabaseConnection.getConnection();
-        PreparedStatement preparedStatement=connection.prepareStatement("SELECT * FROM BOOKS WHERE BOOK_CATEGORY=?");
-        preparedStatement.setString(1,category);
+        Connection connection = DatabaseConnection.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM BOOKS WHERE BOOK_CATEGORY=?");
+        preparedStatement.setString(1, category);
 
-        ResultSet resultSet=preparedStatement.executeQuery();
+        ResultSet resultSet = preparedStatement.executeQuery();
 
-        while(resultSet.next()){
+        while (resultSet.next()) {
             book.setName(resultSet.getString("BOOK_NAME"));
             book.setCategory(category);
             book.setStockAvailable(resultSet.getInt("STOCK_AVAILABLE"));
             booksInCategory.add(book);
         }
-        return  booksInCategory;
+        return booksInCategory;
+    }
+
+    @Override
+    public boolean insertBook(Book book) throws ClassNotFoundException, SQLException, IOException {
+        Connection connection = DatabaseConnection.getConnection();
+
+        PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO BOOKS (BOOK_ID,BOOK_NAME,BOOK_CATEGORY,STOCK_AVAILABLE) VALUES(?,?,?,?)");
+        preparedStatement.setString(1, book.getBookID());
+        preparedStatement.setString(2, book.getName());
+        preparedStatement.setString(3, book.getCategory());
+        preparedStatement.setInt(4, book.getStockAvailable());
+
+        int rows = preparedStatement.executeUpdate();
+
+        return rows > 0;
+    }
+
+    @Override
+    public boolean increaseStock(String book_id, int stock_available) throws ClassNotFoundException, SQLException, IOException {
+
+        Connection connection=DatabaseConnection.getConnection();
+        PreparedStatement preparedStatement=connection.prepareStatement("UPDATE BOOKS SET STOCK_AVAILABLE=STOCK_AVAILABLE+? WHERE BOOK_ID=?");
+        preparedStatement.setInt(1,stock_available);
+        preparedStatement.setString(2,book_id);
+
+        int rows=preparedStatement.executeUpdate();
+
+        return rows>0;
     }
 }

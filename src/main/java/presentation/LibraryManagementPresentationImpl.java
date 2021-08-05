@@ -179,8 +179,9 @@ public class LibraryManagementPresentationImpl implements LibraryManagementPrese
 
                                     adminPresentation.showMenu();
                                     int adminChoice = sc.nextInt();
+                                    sc.nextLine();
                                     adminPresentation.perfomMenu(adminChoice);
-                                    if(adminChoice==5){
+                                    if(adminChoice==7){
                                         break;
                                     }
                                 }
@@ -218,8 +219,9 @@ public class LibraryManagementPresentationImpl implements LibraryManagementPrese
                         while (true) {
                             employeePresentatio.showMenu();
                             int empChoice = sc.nextInt();
+                            sc.nextLine();
                             employeePresentatio.performMenu(empChoice,employeeID);
-                            if(empChoice==6){
+                            if(empChoice==7){
                                 break;
                             }
                         }
